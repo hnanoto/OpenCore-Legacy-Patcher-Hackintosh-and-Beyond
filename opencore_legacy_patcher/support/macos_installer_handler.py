@@ -6,6 +6,7 @@ import logging
 import plistlib
 import tempfile
 import subprocess
+import re
 
 from pathlib import Path
 
@@ -14,6 +15,11 @@ from ..datasets import os_data
 from . import (
     utilities,
     subprocess_wrapper
+)
+
+from ..volume import (
+    can_copy_on_write,
+    generate_copy_arguments
 )
 
 
@@ -90,13 +96,9 @@ class InstallerCreation():
         for file in Path(ia_tmp).glob("*"):
             subprocess.run(["/bin/rm", "-rf", str(file)])
 
-        # Copy installer to tmp (use CoW to avoid extra disk writes)
-        args = ["/bin/cp", "-cR", installer_path, ia_tmp]
-        if utilities.check_filesystem_type() != "apfs":
-            # HFS+ disks do not support CoW
-            args[1] = "-R"
-
-            # Ensure we have enough space for the duplication
+        # Copy installer to tmp
+        if can_copy_on_write(installer_path, ia_tmp) is False:
+            # Ensure we have enough space for the duplication when CoW is not supported
             space_available = utilities.get_free_space()
             space_needed = Path(ia_tmp).stat().st_size
             if space_available < space_needed:
@@ -104,7 +106,7 @@ class InstallerCreation():
                 logging.info(f"{utilities.human_fmt(space_available)} available, {utilities.human_fmt(space_needed)} required")
                 return False
 
-        subprocess.run(args)
+        subprocess.run(generate_copy_arguments(installer_path, ia_tmp))
 
         # Adjust installer_path to point to the copied installer
         installer_path = Path(ia_tmp) / Path(Path(installer_path).name)
@@ -170,9 +172,15 @@ fi
             disks = plistlib.loads(subprocess.run(["/usr/sbin/diskutil", "list", "-plist"], stdout=subprocess.PIPE).stdout.decode().strip().encode())
 
         for disk in disks["AllDisksAndPartitions"]:
-            disk_info = plistlib.loads(subprocess.run(["/usr/sbin/diskutil", "info", "-plist", disk["DeviceIdentifier"]], stdout=subprocess.PIPE).stdout.decode().strip().encode())
             try:
-                all_disks[disk["DeviceIdentifier"]] = {"identifier": disk_info["DeviceNode"], "name": disk_info["MediaName"], "size": disk_info["TotalSize"], "removable": disk_info["Internal"], "partitions": {}}
+                disk_info = plistlib.loads(subprocess.run(["/usr/sbin/diskutil", "info", "-plist", disk["DeviceIdentifier"]], stdout=subprocess.PIPE).stdout.decode().strip().encode())
+            except:
+                # Chinesium USB can have garbage data in MediaName
+                diskutil_output = subprocess.run(["/usr/sbin/diskutil", "info", "-plist", disk["DeviceIdentifier"]], stdout=subprocess.PIPE).stdout.decode().strip()
+                ungarbafied_output = re.sub(r'(<key>MediaName</key>\s*<string>).*?(</string>)', r'\1\2', diskutil_output).encode()
+                disk_info = plistlib.loads(ungarbafied_output)
+            try:
+                all_disks[disk["DeviceIdentifier"]] = {"identifier": disk_info["DeviceNode"], "name": disk_info.get("MediaName", "Disk"), "size": disk_info["TotalSize"], "removable": disk_info["Internal"], "partitions": {}}
             except KeyError:
                 # Avoid crashing with CDs installed
                 continue
