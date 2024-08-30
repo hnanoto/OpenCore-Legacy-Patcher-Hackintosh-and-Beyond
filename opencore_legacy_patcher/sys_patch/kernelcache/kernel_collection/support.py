@@ -33,6 +33,8 @@ class KernelCacheSupport:
                 ["teamID"] =           Team ID (blank on ad-hoc signed)
             To grab the CDHash of a kext, run 'codesign -dvvv <kext_path>'
         """
+        if not kext_name.endswith(".kext"):
+            return False
 
         try:
             aux_cache_path = Path(self.mount_location_data) / Path("/private/var/db/KernelExtensionManagement/AuxKC/CurrentAuxKC/com.apple.kcgen.instructions.plist")
@@ -101,7 +103,6 @@ class KernelCacheSupport:
         plistlib.dump(plist_data, plist_path.open("wb"))
 
         return updated_install_location
-
 
 
     def clean_auxiliary_kc(self) -> None:
