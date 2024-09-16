@@ -1,5 +1,9 @@
 # OpenCore Legacy Patcher changelog
 
+## 2.1.0
+- Fix MacBookPro13,3 listing 'Available patches' after having installed all applicable patches
+- Fix Nvidia Tesla and Kepler patches not installing on Monterey (and older if applicable)
+
 ## 2.0.0
 - Set `AssociatedBundleIdentifiers` property in launch services as an array
 - Move to auto-generated pre/postinstall scripts for PKGs
@@ -26,8 +30,12 @@
     - iMac7,1 - 18,x
     - MacPro3,1 - 6,1
       - MacPro3,1 can only boot with 4 cores max currently
+      - 8 cores can be re-enabled for older OSes in the GUI:
+        - Settings -> Build -> MacPro3,1/Xserve2,1 Workaround
     - Xserve2,1 - 3,1
       - Xserve2,1 can only boot with 4 cores max currently
+      - 8 cores can be re-enabled for older OSes in the GUI:
+        - Settings -> Build -> MacPro3,1/Xserve2,1 Workaround
   - Excludes the newly dropped MacBookAir8,x series.
     - No estimate can be given when support will be added.
   - For non-Metal graphics, Photos app will be broken.

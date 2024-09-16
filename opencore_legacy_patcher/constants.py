@@ -13,7 +13,7 @@ from .detections import device_probe
 class Constants:
     def __init__(self) -> None:
         # Patcher Versioning
-        self.patcher_version:                 str = "2.0.0"  # OpenCore-Legacy-Patcher
+        self.patcher_version:                 str = "2.1.0"  # OpenCore-Legacy-Patcher
         self.patcher_support_pkg_version:     str = "1.8.0"  # PatcherSupportPkg
         self.copyright_date:                  str = "Copyright © 2020-2024 Dortania"
         self.patcher_name:                    str = "OpenCore Legacy Patcher"
@@ -234,6 +234,7 @@ class Constants:
         self.disable_connectdrivers: bool = False  # Disable ConnectDrivers (hibernation)
         self.set_vmm_cpuid:          bool = False  # Set VMM bit inside CPUID
         self.disable_mediaanalysisd: bool = False  # Set mediaanalysisd to spawn
+        self.force_quad_thread:      bool = False #  Force quad thread mode (cpus=4)
         self.set_alc_usage:          bool = True  #  Set AppleALC usage
         self.allow_3rd_party_drives: bool = True  #  Allow ThridPartyDrives quirk
         self.allow_nvme_fixing:      bool = True  #  Allow NVMe Kernel Space Patches
