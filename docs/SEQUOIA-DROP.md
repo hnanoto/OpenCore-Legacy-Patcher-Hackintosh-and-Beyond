@@ -30,7 +30,7 @@ iPhone Mirroring requires T2 for attestation and Apple Intelligence requires an 
 
 * [Dual socket CPUs with Mac Pros and Xserve](#dual-socket-cpus-with-mac-pro-2008-and-xserve-2008)
 * [T2 Security chip](#t2-security-chip)
-* [USB 1.1 (OHCI/UHCI) Support](#usb-11-ohciuhci-support)
+* [USB 1.1 (OHCI/UHCI) Support](#usb-1-1-ohci-uhci-support)
 * [Graphics support and issues](#graphics-support-and-issues)
 
 
@@ -85,7 +85,7 @@ However, the driver has recently been weakened starting from Sonoma, which means
 An alternative way is making sure to enable "Remote Login" in General -> Sharing before updating, which will enable SSH. 
 That means you can take control using Terminal in another system by typing `ssh username@lan-ip-address` and your password. 
 
-After that run Post Install Volume Patching by typing `/Applications/OpenCore-Patcher.app/Contents/MacOS/OpenCore-Patcher --patch-sys-vol` and finally `sudo reboot`.
+After that run Post Install Volume Patching by typing `/Applications/OpenCore-Patcher.app/Contents/MacOS/OpenCore-Patcher --patch_sys_vol` and finally `sudo reboot`.
 
 
 ![](./images/usb11-chart.png)
