@@ -1,8 +1,23 @@
 # OpenCore Legacy Patcher changelog
 
-## 2.1.0
+## 2.0.2
 - Fix Nvidia Kepler patches not installing on Monterey
 - Fix `iMac7,1` and `iMac8,1` failing to apply root patches on macOS Sequoia
+- Avoid downgrading AppleGVA stack on AMD GCN and newer GPUs
+  - Resolves VTDecoderXPC crashes
+  - Thanks @ausdauersportler for the catch!
+- Resolve glitched widgets on 3802-based GPUs running macOS Sequoia 15.1
+- Resolve CoreImage crashes on 3802-based GPUs running macOS Sequoia
+- Resolve missing screen capture crop borders on non-Metal GPUs running macOS Sequoia
+- Resolve TeraScale 2 HDCP kernel panic
+- Resolve specific Wallpaper locking up on non-Metal GPUs running macOS Sequoia
+  - Removes unsupported Metal-based wallpaper (Macintosh Wallpaper)
+- Resolve firmware upload incompatibilities on pre-2012 Macs with 2012+ Airport cards
+  - Thanks @ausdauersportler for the catch!
+- Resolve `diskutil` failing to be located in the installer creation process
+  - Thanks @niklasravnsborg for the report!
+- Increment binaries:
+  - PatcherSupportPkg 1.8.3 - release
 
 ## 2.0.1
 - Fix MacBookPro13,3 listing 'Available patches' after having installed all applicable patches
