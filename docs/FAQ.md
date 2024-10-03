@@ -1,5 +1,8 @@
 # FAQ
 
+
+* [Application requirements](#application-requirements)
+* [How do I make sure I'm all up to date?](#how-do-i-make-sure-i-m-all-up-to-date)
 * [Why are the settings "not saving"?](#why-are-the-settings-not-saving)
 * [Can I use the same USB install media as a universal installer?](#can-i-use-the-same-usb-install-media-as-a-universal-installer)
 * [Can I use OTA updates?](#can-i-use-ota-updates)
@@ -10,6 +13,20 @@
 * [Why isn't iPhone Mirroring working?](#why-isn-t-iphone-mirroring-working)
 * [Where is Apple Intelligence?](#where-is-apple-intelligence)
 
+
+
+## Application requirements
+The patcher application requires **OS X Yosemite 10.10** or later to run.
+* **OS X El Capitan 10.11** or later is required to make installers for macOS Ventura and later.
+
+The patcher is designed to target **macOS Big Sur 11.x to macOS Sequoia 15.x**.
+* Other versions may work, albeit in a broken state. No support is provided for any version outside of the above.
+
+## How do I make sure I'm all up to date?
+
+Updating the OCLP installation is a three step process, first the application, second the bootloader and finally root patches.
+
+Refer to [Updating OpenCore and patches](https://dortania.github.io/OpenCore-Legacy-Patcher/UPDATE.html) for how to update the application and patches.
 
 ## Why are the settings "not saving"?
 
@@ -51,9 +68,13 @@ Patches can also break if automatic updates are enabled and an update modifies t
 
 ## Crashing in random places
 
-There are two rather common things that can cause weird crashing. First is a process called "mediaanalysisd" on 3802-based systems* and secondly FeatureUnlock. You can try disabling these settings in OCLP to try and gain higher stability.
+There are two rather common things that can cause weird crashing. First is a process called "mediaanalysisd" on 3802-based systems* and secondly FeatureUnlock. You can try disabling these settings in OCLP to try and gain higher stability. As always, install a new OpenCore build after selecting the settings and restart.
 
 Be advised that by disabling FeatureUnlock, you will lose some macOS functionality. The features enabled by FeatureUnlock are listed [here](https://github.com/acidanthera/FeatureUnlock).
+
+| FeatureUnlock | mediaanalysisd |
+| :--- | :--- |
+| ![FeatureUnlock](./images/OCLP_FeatureUnlock_Setting.png) | ![mediaanalysisd](./images/OCLP_Disable_mediaanalysisd_Setting.png) |
 
 *3802 systems include:
 * NVIDIA
