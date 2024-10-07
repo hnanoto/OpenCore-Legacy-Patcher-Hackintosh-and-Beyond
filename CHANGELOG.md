@@ -1,5 +1,17 @@
 # OpenCore Legacy Patcher changelog
 
+## 2.1.0
+- Disable FeatureUnlock by default
+  - Intended to maintain long term stability
+  - If features unlocked by FeatureUnlock desired, can be enabled in settings
+- Disable mediaanalysisd on Metal 3802-based GPUs
+  - Intended to maintain long term stability
+  - If Live Text support desired, can be enabled in settings
+- Support for retaining GUI settings when building on-model
+  - When switching to a different model, model-specific GUI settings will be reset
+  - Note resetting saved settings not implemented yet
+    - Delete `/Users/Shared/.com.dortania.opencore-legacy-patcher.plist` and restart app to reset settings
+
 ## 2.0.2
 - Fix Nvidia Kepler patches not installing on Monterey
 - Fix `iMac7,1` and `iMac8,1` failing to apply root patches on macOS Sequoia
