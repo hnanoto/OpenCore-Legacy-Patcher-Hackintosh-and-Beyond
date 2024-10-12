@@ -74,71 +74,55 @@ module.exports = {
 
         },
         {
-            title: 'Setting up',
+            title: 'How to install',
             collapsable: false,
             sidebarDepth: 1,
             children: [
                 'INSTALLER',
-                'BUILD',
-            ]
-
-        },
-        {
-            title: 'Installation',
-            collapsable: false,
-            sidebarDepth: 1,
-            children: [
-                'BOOT',
+                'BUILD',                
+		'BOOT',
                 'POST-INSTALL',
             ]
 
         },
         {
-            title: 'macOS Sequoia',
+            title: 'macOS Support',
             collapsable: false,
             sidebarDepth: 1,
             children: [
                 'SEQUOIA-DROP',
+		'SONOMA-DROP',
+		'VENTURA-DROP',
+		'MONTEREY-DROP',
             ]
         },
-        {
-            title: 'macOS Sonoma',
+ {
+            title: 'Application',
             collapsable: false,
             sidebarDepth: 1,
             children: [
-                'SONOMA-DROP',
+                'UPDATE',
+                'UNINSTALL',
+                'PROCESS',
             ]
         },
-
-        {
-            title: 'macOS Ventura',
+	{
+            title: 'Troubleshooting',
             collapsable: false,
             sidebarDepth: 1,
             children: [
-                'VENTURA-DROP',
+		'TROUBLESHOOTING',
+                'ACCEL',
+		'DEBUG',
+                
             ]
-        },
-
-        {
-            title: 'macOS Monterey',
-            collapsable: false,
-            sidebarDepth: 1,
-            children: [
-                'MONTEREY-DROP',
-            ]
-        },
+        },	  
         {
             title: 'Misc',
             collapsable: false,
             sidebarDepth: 1,
             children: [
-                'ACCEL',
-                'TROUBLESHOOTING',
 		'TIMEMACHINE',
-                'UPDATE',
-                'UNINSTALL',
-                'PROCESS',
-                'DEBUG',
                 'ICNS',
                 'WINDOWS',
                 'UNIVERSALCONTROL',
