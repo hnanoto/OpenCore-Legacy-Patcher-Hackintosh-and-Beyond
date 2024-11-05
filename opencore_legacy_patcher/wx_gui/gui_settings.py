@@ -158,7 +158,16 @@ class SettingsFrame(wx.Frame):
                 if setting_info["type"] == "checkbox":
                     # Add checkbox, and description underneath
                     checkbox = wx.CheckBox(panel, label=setting, pos=(10 + width, 10 + height), size = (300,-1))
-                    checkbox.SetValue(setting_info["value"] if setting_info["value"] else False)
+
+                    value = False
+                    if "value" in setting_info:
+                        try:
+                            value = bool(setting_info["value"])
+                        except ValueError:
+                            logging.error(f"Invalid value for {setting}, got {setting_info['value']} (type: {type(setting_info['value'])})")
+                            value = False
+
+                    checkbox.SetValue(value)
                     checkbox.SetFont(gui_support.font_factory(13, wx.FONTWEIGHT_BOLD))
                     event = lambda event, warning=setting_info["warning"] if "warning" in setting_info else "", override=bool(setting_info["override_function"]) if "override_function" in setting_info else False: self.on_checkbox(event, warning, override)
                     checkbox.Bind(wx.EVT_CHECKBOX, event)
@@ -1106,13 +1115,17 @@ Hardware Information:
     def _update_setting(self, variable, value):
         logging.info(f"Updating Local Setting: {variable} = {value}")
         setattr(self.constants, variable, value)
-        tmp_value = value or "PYTHON_NONE_VALUE"
+        tmp_value = value
+        if tmp_value is None:
+            tmp_value = "PYTHON_NONE_VALUE"
         global_settings.GlobalEnviromentSettings().write_property(f"GUI:{variable}", tmp_value)
 
 
     def _update_global_settings(self, variable, value, global_setting = None):
         logging.info(f"Updating Global Setting: {variable} = {value}")
-        tmp_value = value or "PYTHON_NONE_VALUE"
+        tmp_value = value
+        if tmp_value is None:
+            tmp_value = "PYTHON_NONE_VALUE"
         global_settings.GlobalEnviromentSettings().write_property(variable, tmp_value)
         if global_setting is not None:
             self._update_setting(global_setting, value)

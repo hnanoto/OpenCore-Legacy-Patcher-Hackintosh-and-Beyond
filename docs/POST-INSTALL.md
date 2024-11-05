@@ -22,7 +22,7 @@ And voila! No more USB drive required.
 To do this, run the OpenCore Patcher and head to Patcher Settings, then uncheck "Show OpenCore Bootpicker" on the Build tab:
 
 
-<div align="center">
+<div align="left">
              <img src="./images/OCLP-GUI-Settings-ShowPicker.png" alt="GUI Settings ShowPicker" width="600" />
 </div>
 
@@ -31,7 +31,9 @@ Once you've toggled it off, build your OpenCore EFI once again and install to yo
 
 ## SIP settings
 
-SIP, or System Integrity Protection, needs to be lowered on systems where root patching is required to patch data on disk. This will vary between OS versions and the model in question. OCLP by default will determine the proper SIP options for the OS version and Mac model, in most cases the user has no need to touch these settings. However, this part explains how the SIP settings work in OCLP, where lowered SIP is needed and where full SIP could be enabled.
+SIP, or System Integrity Protection, needs to be lowered on systems where root patching is required to patch data on disk. This will vary between OS versions and the model in question. 
+
+OCLP by default will determine the proper SIP options for the OS version and Mac model, in most cases the user has no need to touch these settings.
 
 :::warning
 
@@ -39,12 +41,16 @@ If you're unsure whether you should change the SIP settings, leave them as-is. S
 
 :::
 
-SIP settings can be accessed from the Security tab shown in the images. To change SIP settings, make the changes here, return in main menu and rebuild OpenCore using the first option.
-
-| SIP Enabled | SIP Lowered (Root Patching) | SIP Disabled |
+| SIP Enabled | SIP Lowered (OCLP default) | SIP Disabled |
 | :--- | :--- | :--- |
 | ![](./images/OCLP-GUI-Settings-SIP-Enabled.png) | ![](./images/OCLP-GUI-Settings-SIP-Root-Patch.png) | ![](./images/OCLP-GUI-Settings-SIP-Disabled.png) |
 
+
+The guide in the dropdown below explains how the SIP settings work in OCLP, where lowered SIP is needed and where full SIP could be enabled.
+
+::: details Configuring SIP manually (click to expand)
+
+SIP settings can be accessed from the Security tab shown in the images. To change SIP settings, make the changes here, return in main menu and rebuild OpenCore using the first option.
 
 In the cases where SIP can be enabled, manually enabling it is needed. 
 
@@ -65,7 +71,15 @@ Pre-2012 systems, also known as "non-Metal", as well as NVIDIA Kepler and Intel 
 All Metal capable systems from 2012 onward (incl. NVIDIA Kepler and Intel HD 4000) as well as Mac Pros with upgraded GPU can run with full SIP enabled. 
 Non-Metal systems still require lowered SIP.
 
+:::
+
 ## Applying Post Install Volume Patches
+
+Post Install Volume Patches, sometimes also called root patches, are patches that have to be installed to disk for some older Macs to gain back functionality.
+
+OCLP will automatically root patch your system during a first time install **if the USB install media was created within OCLP.** Users will also be prompted to install these patches after macOS updates or whenever patches are not detected on the system. We recommend rebuilding OpenCore with the latest version of OCLP to take advantage of these new features.
+
+Users can also see whether applicable patches have been installed, date and version the system was root patched with in the Post-Install Menu.
 
 :::warning
 
@@ -73,13 +87,9 @@ If you need to use Migration Assistant to bring over data to your new macOS inst
 
 Using Migration Assistant while patches are installed can lead to an unbootable system, requiring a reinstall of macOS.
 
+For more information on how to restore a Time Machine backup, [refer to the guide here.](https://dortania.github.io/OpenCore-Legacy-Patcher/TIMEMACHINE.html)
+
 :::
-
-Post Install Volume Patches, sometimes also called root patches, are patches that have to be installed to disk for some older Macs to gain back functionality.
-
-OCLP will automatically root patch your system during a first time install **if the USB install media was created within OCLP.** Users will also be prompted to install these patches after macOS updates or whenever patches are not detected on the system. We recommend rebuilding OpenCore with the latest version of OCLP to take advantage of these new features.
-
-Users can also see whether applicable patches have been installed, date and version the system was root patched with in the Post-Install Menu.
 
 | Automatic install prompt | Status |
 | :--- | :--- |
