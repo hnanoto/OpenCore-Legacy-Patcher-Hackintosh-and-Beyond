@@ -17,6 +17,8 @@ Once you've installed macOS through OpenCore, you can boot up and go through the
 
 And voila! No more USB drive required.
 
+If you're having issues with undetected internal disk, refer to [Internal disk missing when building OpenCore](https://dortania.github.io/OpenCore-Legacy-Patcher/TROUBLESHOOTING.html#internal-disk-missing-when-building-opencore) for troubleshooting.
+
 ## Booting seamlessly without Boot Picker
 
 To do this, run the OpenCore Patcher and head to Patcher Settings, then uncheck "Show OpenCore Bootpicker" on the Build tab:
@@ -77,7 +79,7 @@ Non-Metal systems still require lowered SIP.
 
 Post Install Volume Patches, sometimes also called root patches, are patches that have to be installed to disk for some older Macs to gain back functionality.
 
-OCLP will automatically root patch your system during a first time install **if the USB install media was created within OCLP.** Users will also be prompted to install these patches after macOS updates or whenever patches are not detected on the system. We recommend rebuilding OpenCore with the latest version of OCLP to take advantage of these new features.
+OCLP will automatically root patch your system during a first time install **if the USB install media was created within OCLP and the proper model was selected before installer creation.** Users will also be prompted to install these patches after macOS updates or whenever patches are not detected on the system. We recommend rebuilding OpenCore with the latest version of OCLP to take advantage of these new features.
 
 Users can also see whether applicable patches have been installed, date and version the system was root patched with in the Post-Install Menu.
 
