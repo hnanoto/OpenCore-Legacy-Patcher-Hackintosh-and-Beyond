@@ -7,7 +7,7 @@ Here are some common errors that users may experience while using this patcher:
 * [Stuck on `This version of Mac OS X is not supported on this platform` or (🚫) Prohibited Symbol](#stuck-on-this-version-of-mac-os-x-is-not-supported-on-this-platform-or-🚫-prohibited-symbol)
 * [Stuck on hard disk selection with greyed out buttons in installer](#stuck-on-hard-disk-selection-with-greyed-out-buttons-in-installer)
 * [Cannot boot macOS without the USB](#cannot-boot-macos-without-the-usb)
-* [Infinite Recovery OS Booting](#infinite-recovery-os-reboot)
+* [Infinite Recovery OS Booting](#infinite-recovery-os-booting)
 * [Internal disk missing when building OpenCore](#internal-disk-missing-when-building-opencore)
 * [System version mismatch error when root patching](#system-version-mismatch-error-when-root-patching)
 * [Stuck on boot after root patching](#stuck-on-boot-after-root-patching)
@@ -18,8 +18,8 @@ Here are some common errors that users may experience while using this patcher:
 * [No Brightness Control](#no-brightness-control)
 * [Cannot connect Wi-Fi on Monterey with legacy cards](#cannot-connect-Wi-Fi-on-Monterey-with-legacy-cards)
 * [No Graphics Acceleration](#no-graphics-acceleration)
-* [Black Screen on MacBookPro11,3 in macOS Monterey](#black-screen-on-macbookpro113-in-macos-monterey)
-* [No DisplayPort Output on Mac Pros with NVIDIA Kepler](#no-displayport-output-on-mac-pros-with-NVIDIA-kepler)
+* [Black Screen on MacBookPro11,3 in macOS Monterey](#black-screen-on-macbookpro11-3-in-macos-monterey)
+* [No DisplayPort Output on Mac Pros with NVIDIA Kepler](#no-displayport-output-on-mac-pros-with-nvidia-kepler)
 * [Volume Hash Mismatch Error in macOS Monterey](#volume-hash-mismatch-error-in-macos-monterey)
 * [Cannot Disable SIP in recoveryOS](#cannot-disable-sip-in-recoveryos)
 * [Stuck on "Less than a minute remaining..."](#stuck-on-less-than-a-minute-remaining)
@@ -319,4 +319,11 @@ Applicable models include:
 
 If you notice your Touchbar etc not working, this means loss of T1 functionality. 
 
-Wiping the entire disk using Disk Utility with Sonoma or newer causes the T1 firmware to be removed, which due to removed support, the macOS Sonoma+ installer will not restore. To restore T1 functionality, Ventura or older has to be reinstalled. This can be done in another volume or external disk as well, as long as the OS is booted once. After this you can wipe the old OS or unplug the external disk.
+Wiping the entire disk using Disk Utility with Sonoma or newer causes the T1 firmware to be removed, which due to removed support, the macOS Sonoma+ installer will not restore. If the firmware is missing from EFI, T1 will not work regardless whether OCLP reinstates the driver during root patching. To restore T1 functionality, Ventura or older has to be reinstalled. This can be done in another volume or external disk as well, as long as the OS is booted once. After this you can wipe the old OS or unplug the external disk.
+
+
+To prevent this from happening in the future, with T1 systems only wipe the volume containing the operating system.
+
+<div align="left">
+             <img src="./images/wipe-volume.png" alt="WipeVolume" width="800" />
+</div>
