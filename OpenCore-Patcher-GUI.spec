@@ -5,6 +5,7 @@ import sys
 import time
 import platform
 import subprocess
+import importlib
 
 from pathlib import Path
 
@@ -26,19 +27,40 @@ datas = [
 if Path("DortaniaInternalResources.dmg").exists():
    datas.append(('DortaniaInternalResources.dmg', '.'))
 
-def _detect_target_arch() -> str:
+def _is_fat_binary(path: Path) -> bool:
    """
-   Select universal build when the running Python binary already contains
-   both architectures; otherwise fall back to the host architecture so
-   local builds succeed on single-arch interpreters.
+   Returns True when the provided binary contains both x86_64 and arm64 slices.
    """
    try:
-      output = subprocess.check_output(["lipo", "-info", sys.executable], stderr=subprocess.STDOUT).decode(errors="ignore")
-      if "Non-fat" not in output:
-         return "universal2"
+      output = subprocess.check_output(["lipo", "-info", str(path)], stderr=subprocess.STDOUT).decode(errors="ignore")
    except Exception:
-      pass
-   return platform.machine()
+      return False
+   return ("Non-fat" not in output) and ("x86_64" in output) and ("arm64" in output)
+
+
+def _detect_target_arch() -> str:
+   """
+   Select universal build only when the interpreter and core native
+   extensions are true fat binaries. Allow manual override via
+   PYINSTALLER_TARGET_ARCH.
+   """
+   override = os.environ.get("PYINSTALLER_TARGET_ARCH")
+   if override:
+      return override
+
+   if not _is_fat_binary(Path(sys.executable)):
+      return platform.machine()
+
+   for module_name in ("wx._core", "wx._adv"):
+      try:
+         module = importlib.import_module(module_name)
+      except Exception:
+         continue
+      module_path = Path(getattr(module, "__file__", ""))
+      if module_path.suffix == ".so" and not _is_fat_binary(module_path):
+         return platform.machine()
+
+   return "universal2"
 
 target_arch = _detect_target_arch()
 
