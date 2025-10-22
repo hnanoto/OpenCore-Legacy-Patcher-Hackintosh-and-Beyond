@@ -1,4 +1,5 @@
 [flake8]
+exclude = .git,__pycache__,.venv,dist,build
 extend-ignore = E501, E203
 per-file-ignores =
     Resources/constants.py:E704

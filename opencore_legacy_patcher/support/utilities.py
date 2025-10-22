@@ -331,7 +331,6 @@ def disable_cls():
 
 
 def cls():
-    global clear
     if not clear:
         return
     if check_cli_args() is None:

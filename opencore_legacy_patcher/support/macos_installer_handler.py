@@ -87,7 +87,6 @@ class InstallerCreation():
 
         # Create a new tmp directory
         # Our current one is a disk image, thus CoW will not work
-        global tmp_dir
         ia_tmp = tmp_dir.name
 
         logging.info(f"Creating temporary directory at {ia_tmp}")
