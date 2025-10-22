@@ -38,4 +38,5 @@ __pycache__/
 /payloads/update.sh
 /payloads/OpenCore-Patcher.app
 /.x86_64_venv
+/.venv
 *afdesign~lock~

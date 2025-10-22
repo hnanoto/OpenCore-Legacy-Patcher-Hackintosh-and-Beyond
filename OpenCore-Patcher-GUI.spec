@@ -3,6 +3,7 @@
 import os
 import sys
 import time
+import platform
 import subprocess
 
 from pathlib import Path
@@ -25,6 +26,21 @@ datas = [
 if Path("DortaniaInternalResources.dmg").exists():
    datas.append(('DortaniaInternalResources.dmg', '.'))
 
+def _detect_target_arch() -> str:
+   """
+   Select universal build when the running Python binary already contains
+   both architectures; otherwise fall back to the host architecture so
+   local builds succeed on single-arch interpreters.
+   """
+   try:
+      output = subprocess.check_output(["lipo", "-info", sys.executable], stderr=subprocess.STDOUT).decode(errors="ignore")
+      if "Non-fat" not in output:
+         return "universal2"
+   except Exception:
+      pass
+   return platform.machine()
+
+target_arch = _detect_target_arch()
 
 a = Analysis(['OpenCore-Patcher-GUI.command'],
              pathex=[],
@@ -55,7 +71,7 @@ exe = EXE(pyz,
           upx=True,
           console=False,
           disable_windowed_traceback=False,
-          target_arch="universal2",
+          target_arch=target_arch,
           codesign_identity=None,
           entitlements_file=None)
 
