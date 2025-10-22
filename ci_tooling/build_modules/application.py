@@ -46,8 +46,7 @@ class GenerateApplication:
         _args = self._pyinstaller + ["./OpenCore-Patcher-GUI.spec", "--noconfirm"]
         target_arch = os.environ.get("PYINSTALLER_TARGET_ARCH")
         if target_arch:
-            print(f"Detected PYINSTALLER_TARGET_ARCH={target_arch}, forwarding to PyInstaller")
-            _args.extend(["--target-arch", target_arch])
+            print(f"Detected PYINSTALLER_TARGET_ARCH={target_arch}")
         self._ensure_universal_wx(target_arch)
         if self._reset_pyinstaller_cache:
             _args.append("--clean")
@@ -244,7 +243,7 @@ class GenerateApplication:
                 str(temp_dir),
             ]
             subprocess_wrapper.run_and_verify(download_cmd)
-            wheel_files = list(temp_dir.glob("wxPython-*.whl"))
+            wheel_files = list(temp_dir.glob("wxPython-*.whl")) + list(temp_dir.glob("wxpython-*.whl"))
             if not wheel_files:
                 print("Failed to download Intel wxPython wheel; cannot merge binaries")
                 return
