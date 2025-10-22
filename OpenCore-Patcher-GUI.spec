@@ -63,6 +63,7 @@ def _detect_target_arch() -> str:
    return "universal2"
 
 target_arch = _detect_target_arch()
+print(f"Resolved PyInstaller target arch: {target_arch}")
 
 a = Analysis(['OpenCore-Patcher-GUI.command'],
              pathex=[],

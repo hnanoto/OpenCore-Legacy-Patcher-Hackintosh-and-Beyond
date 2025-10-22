@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 import plistlib
@@ -40,6 +41,9 @@ class GenerateApplication:
 
         print("Generating OpenCore-Patcher.app")
         _args = self._pyinstaller + ["./OpenCore-Patcher-GUI.spec", "--noconfirm"]
+        target_arch = os.environ.get("PYINSTALLER_TARGET_ARCH")
+        if target_arch:
+            _args.extend(["--target-arch", target_arch])
         if self._reset_pyinstaller_cache:
             _args.append("--clean")
 
