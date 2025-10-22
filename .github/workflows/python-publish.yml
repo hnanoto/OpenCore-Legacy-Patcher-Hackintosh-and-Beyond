@@ -41,7 +41,18 @@ jobs:
         ditto -c -k --keepParent dist/OpenCore-Patcher.pkg OpenCore-Patcher.pkg.zip
         ditto -c -k --keepParent dist/OpenCore-Patcher-Uninstaller.pkg OpenCore-Patcher-Uninstaller.pkg.zip
         ditto -c -k --keepParent dist/AutoPkg-Assets.pkg AutoPkg-Assets.pkg.zip
+    - name: Upload workflow artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: opencore-legacy-patcher-build
+        retention-days: 7
+        path: |
+          OpenCore-Patcher.app.zip
+          OpenCore-Patcher.pkg.zip
+          OpenCore-Patcher-Uninstaller.pkg.zip
+          AutoPkg-Assets.pkg.zip
     - name: Upload release assets
+      if: startsWith(github.ref, 'refs/tags/')
       uses: softprops/action-gh-release@v2
       with:
         files: |
