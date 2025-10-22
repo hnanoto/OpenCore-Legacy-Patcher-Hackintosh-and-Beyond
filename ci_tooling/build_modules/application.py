@@ -43,11 +43,13 @@ class GenerateApplication:
         _args = self._pyinstaller + ["./OpenCore-Patcher-GUI.spec", "--noconfirm"]
         target_arch = os.environ.get("PYINSTALLER_TARGET_ARCH")
         if target_arch:
+            print(f"Detected PYINSTALLER_TARGET_ARCH={target_arch}, forwarding to PyInstaller")
             _args.extend(["--target-arch", target_arch])
         if self._reset_pyinstaller_cache:
             _args.append("--clean")
 
-        subprocess_wrapper.run_and_verify(_args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        print("Invoking PyInstaller:", " ".join(str(arg) for arg in _args))
+        subprocess_wrapper.run_and_verify(_args)
 
 
     def _embed_analytics_key(self) -> None:
