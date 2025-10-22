@@ -33,7 +33,7 @@ jobs:
         python -m pip install -r requirements.txt
     - name: Build app bundle
       env:
-        PYINSTALLER_TARGET_ARCH: arm64
+        PYINSTALLER_TARGET_ARCH: universal2
       run: python Build-Project.command
     - name: Package artifacts
       run: |

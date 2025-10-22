@@ -1,7 +1,10 @@
 import os
 import sys
 import time
+import shutil
+import zipfile
 import plistlib
+import tempfile
 import subprocess
 
 from pathlib import Path
@@ -45,6 +48,7 @@ class GenerateApplication:
         if target_arch:
             print(f"Detected PYINSTALLER_TARGET_ARCH={target_arch}, forwarding to PyInstaller")
             _args.extend(["--target-arch", target_arch])
+        self._ensure_universal_wx(target_arch)
         if self._reset_pyinstaller_cache:
             _args.append("--clean")
 
@@ -180,3 +184,88 @@ class GenerateApplication:
         self._patch_load_command()
         self._embed_git_data()
         self._embed_resources()
+
+    @staticmethod
+    def _is_fat_binary(path: Path) -> bool:
+        """
+        Determine whether the binary contains both x86_64 and arm64 slices.
+        """
+        if not path.exists():
+            return False
+        try:
+            result = subprocess.run(["lipo", "-info", str(path)], check=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        except FileNotFoundError:
+            return False
+        output = result.stdout.decode(errors="ignore")
+        return ("Non-fat" not in output) and ("x86_64" in output) and ("arm64" in output)
+
+    def _ensure_universal_wx(self, target_arch: str | None) -> None:
+        """
+        Ensure wxPython binaries are universal when building universal2 artifacts.
+        """
+        if target_arch != "universal2":
+            return
+
+        try:
+            import wx  # type: ignore
+        except ImportError:
+            print("wxPython not available, skipping binary merge step")
+            return
+
+        wx_dir = Path(wx.__file__).parent  # type: ignore
+        binaries = list(wx_dir.glob("*.so"))
+        if not binaries:
+            print("No wxPython binaries found to universalize")
+            return
+        if all(self._is_fat_binary(binary) for binary in binaries):
+            print("wxPython binaries already universal")
+            return
+
+        print("wxPython binaries missing x86_64 slice; downloading Intel wheel to merge")
+        temp_dir = Path(tempfile.mkdtemp(prefix="wx-fat-"))
+        try:
+            download_cmd = [
+                sys.executable,
+                "-m",
+                "pip",
+                "download",
+                "wxPython==4.2.3",
+                "--only-binary=:all:",
+                "--no-deps",
+                "--platform",
+                "macosx_10_10_x86_64",
+                "--python-version",
+                "311",
+                "--implementation",
+                "cp",
+                "--abi",
+                "cp311",
+                "-d",
+                str(temp_dir),
+            ]
+            subprocess_wrapper.run_and_verify(download_cmd)
+            wheel_files = list(temp_dir.glob("wxPython-*.whl"))
+            if not wheel_files:
+                print("Failed to download Intel wxPython wheel; cannot merge binaries")
+                return
+
+            wheel_extract_dir = temp_dir / "wheel"
+            wheel_extract_dir.mkdir()
+            with zipfile.ZipFile(wheel_files[0], "r") as wheel_zip:
+                wheel_zip.extractall(wheel_extract_dir)
+
+            intel_wx_dir = wheel_extract_dir / "wx"
+            missing = []
+            for binary in binaries:
+                intel_binary = intel_wx_dir / binary.name
+                if not intel_binary.exists():
+                    missing.append(binary.name)
+                    continue
+                subprocess_wrapper.run_and_verify(["lipo", "-create", str(binary), str(intel_binary), "-output", str(binary)])
+
+            if missing:
+                print(f"Warning: missing x86_64 counterparts for {missing}")
+            else:
+                print("Successfully merged wxPython binaries into universal slices")
+        finally:
+            shutil.rmtree(temp_dir, ignore_errors=True)
