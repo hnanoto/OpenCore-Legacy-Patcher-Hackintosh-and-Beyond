@@ -2,6 +2,7 @@
 
 The below page is for users experiencing issues with their overall usage of macOS Big Sur and newer and the Legacy Graphics Acceleration patches. For those unfamiliar with what is considered a non-Metal GPU, see the chart in [FAQ](https://dortania.github.io/OpenCore-Legacy-Patcher/FAQ.html#what-is-metal-and-non-metal)
 
+* [Broken Firefox and Thunderbird (HD 3000)](#broken-firefox-and-thunderbird-hd-3000)
 * [Broken Background Blurs](#broken-background-blurs)
 * [Downloading older non-Metal Apps](#downloading-older-non-metal-apps)
 * [Unable to run Zoom](#unable-to-run-zoom)
@@ -9,6 +10,19 @@ The below page is for users experiencing issues with their overall usage of macO
 * [Photos and Maps app issues](#photos-and-maps-app-issues)
 * [Cannot press "Done" when editing a Sidebar Widget](#cannot-press-done-when-editing-a-sidebar-widget)
 * [Unable to allow Safari Extensions](#unable-to-allow-safari-extensions)
+
+
+## Broken Firefox and Thunderbird (HD 3000)
+
+Firefox and Thunderbird are now broken on HD 3000 [due to removal of HD 3000 support by Mozilla in v145.](https://hg-edge.mozilla.org/releases/mozilla-release/rev/32d4368e5a2a869bdc1f4556f020c1a6bea2a9c0) This may lead to system freezes and other erratic behavior on systems with this GPU, which is found in Mac models from 2011. As a workaround, hardware acceleration has to be disabled. If your system is locking up in normal mode, boot into Safe Mode by holding `Shift` on boot and disable hardware acceleration for Firefox and Thunderbird wherever applicable.
+
+::: details Affected Mac models (click to expand)
+
+* MacBook Pro 2011 13", 15" and 17"
+* MacBook Air 2011 11" and 13"
+* Mac mini 2011 models without Radeon dGPU
+
+:::
 
 ## Broken Background Blurs
 
